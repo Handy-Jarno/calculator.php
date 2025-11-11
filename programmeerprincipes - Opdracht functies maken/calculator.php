@@ -1,13 +1,16 @@
 <?php
-// Simple Calculator with Functions and Loop
-
 function getNumber($message) {
-    return (float)readline($message);
+    echo $message;
+    $handle = fopen("php://stdin", "r");
+    $line = fgets($handle);
+    return (float)trim($line);
 }
 
 function getOperation() {
-    $operation = readline("Enter operation (+, -, *, /): ");
-    return $operation;
+    echo "Enter operation (+, -, *, /): ";
+    $handle = fopen("php://stdin", "r");
+    $line = fgets($handle);
+    return trim($line);
 }
 
 function calculate($num1, $num2, $operation) {
@@ -39,12 +42,23 @@ function startCalculator() {
         $result = calculate($num1, $num2, $operation);
         echo "Result: $result\n";
 
-        $again = strtolower(readline("Do you want to calculate again? (y/n): "));
-    } while ($again === 'y');
+        echo "Do you want to calculate again? (y/n): ";
+        $handle = fopen("php://stdin", "r");
+        $again = trim(fgets($handle));
 
-    echo "Goodbye!\n";
+        if (strtolower($again) !== 'y') {
+            echo "Do you want to restart the calculator? (y/n): ";
+            $restart = trim(fgets($handle));
+            if (strtolower($restart) === 'y') {
+                startCalculator();
+            } else {
+                echo "Goodbye!\n";
+                break;
+            }
+        }
+
+    } while (strtolower($again) === 'y');
 }
 
-// Start the calculator
 startCalculator();
 ?>
